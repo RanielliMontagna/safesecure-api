@@ -1,0 +1,22 @@
+meta {
+  name: Edit category
+  type: http
+  seq: 4
+}
+
+put {
+  url: {{apiUrl}}/categories/c37db305-1f8b-4880-9eba-038df7022370
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZG9lLmNvbSIsIm5hbWUiOiJKb2huIiwic3ViIjoiMGE0MTY1ZmUtZmQwYS00YzEzLWFmMzAtOWM4OGNkNTE5MGUxIiwiaWF0IjoxNzI2MTc5MjAxLCJleHAiOjE3MjY3ODQwMDF9.UFXBDlijtzkf-93ddHHFIG8NGw1s3EJ0QlDGLpSvDvs
+}
+
+body:json {
+  {
+    "name": "Luvas",
+    "description": "Todos os tipos de luvas usadas para proteger as mãos contra riscos e lesões, cortes, abrasões, perfurações, queimaduras, produtos químicos, calor, frio e vibrações"
+  }
+}

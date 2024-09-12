@@ -1,0 +1,15 @@
+meta {
+  name: Get Category
+  type: http
+  seq: 2
+}
+
+get {
+  url: {{apiUrl}}/categories/{id}
+  body: none
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZG9lLmNvbSIsIm5hbWUiOiJKb2huIiwic3ViIjoiMGE0MTY1ZmUtZmQwYS00YzEzLWFmMzAtOWM4OGNkNTE5MGUxIiwiaWF0IjoxNzI2MTc5MjAxLCJleHAiOjE3MjY3ODQwMDF9.UFXBDlijtzkf-93ddHHFIG8NGw1s3EJ0QlDGLpSvDvs
+}
