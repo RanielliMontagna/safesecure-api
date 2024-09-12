@@ -13,7 +13,52 @@ model User {
   name          String
   password_hash String
 
-  created_at DateTime @default(now())
+  created_at DateTime   @default(now())
+  Category   Category[]
 
   @@map("users")
 }
+
+model Category {
+  id          String  @id @default(uuid())
+  name        String
+  description String?
+
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id])
+
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+  // Equipment  Equipment[]
+
+  @@map("categories")
+}
+
+// model Employee {
+//   id           String @id @default(uuid())
+//   name         String
+//   cpf          String @unique
+//   registration Int    @unique
+//   setor        String
+
+//   created_at DateTime @default(now())
+//   updated_at DateTime @updatedAt
+
+//   @@map("employees")
+// }
+
+// model Equipment {
+//   id       String @id @default(uuid())
+//   code     String
+//   name     String
+//   quantity Int
+
+//   category_id String
+//   category    Category @relation(fields: [category_id], references: [id])
+
+//   created_at DateTime @default(now())
+//   updated_at DateTime @updatedAt
+
+//   @@map("equipments")
+// }
