@@ -15,6 +15,7 @@
     "clean": "rm -rf build && rm -rf node_modules && rm -rf .vitest",
     "lint": "eslint --fix --ext .ts src",
     "prisma:migrate": "prisma migrate dev",
+    "prisma:deploy": "prisma migrate deploy",
     "prisma:seed": "prisma db seed",
     "prisma:generate": "prisma generate"
   },

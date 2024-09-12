@@ -7,6 +7,7 @@ const prisma = new PrismaClient()
 export const users = [
   { email: 'john@doe.com', name: 'John' },
   { email: 'engs-lucascordeiro@camporeal.edu.br', name: 'Lucas Cordeiro' },
+  { email: 'depaulacordeirolucas@gmail.com', name: 'Lucas Cordeiro' },
 ]
 
 async function main() {
