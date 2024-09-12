@@ -4,7 +4,10 @@ import { createHashPassword } from '../src/utils/create-hash-password'
 
 const prisma = new PrismaClient()
 
-export const users = [{ email: 'john@doe.com', name: 'John' }]
+export const users = [
+  { email: 'john@doe.com', name: 'John' },
+  { email: 'engs-lucascordeiro@camporeal.edu.br', name: 'Lucas Cordeiro' },
+]
 
 async function main() {
   const hashPassword = await createHashPassword('a1s2d3')
