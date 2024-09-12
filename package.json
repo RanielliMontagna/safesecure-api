@@ -1,0 +1,51 @@
+{
+  "name": "safesecure-api",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "engines": {
+    "node": ">=18"
+  },
+  "scripts": {
+    "dev": "tsx watch src/server.ts",
+    "dev:docker": "npm run prisma:migrate && npm run prisma:seed && npm run dev",
+    "start": "node build/server.js",
+    "build": "tsup src --out-dir build",
+    "prettier": "prettier --write .",
+    "clean": "rm -rf build && rm -rf node_modules && rm -rf .vitest",
+    "lint": "eslint --fix --ext .ts src",
+    "prisma:migrate": "prisma migrate dev",
+    "prisma:seed": "prisma db seed",
+    "prisma:generate": "prisma generate"
+  },
+  "prisma": {
+    "seed": "ts-node --transpile-only prisma/seed.ts"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "@fastify/cors": "^8.3.0",
+    "@fastify/jwt": "^7.2.0",
+    "@prisma/client": "^5.0.0",
+    "bcryptjs": "2.4.3",
+    "dayjs": "1.11.9",
+    "dotenv": "16.3.1",
+    "fastify": "4.21.0",
+    "zod": "3.21.4"
+  },
+  "devDependencies": {
+    "@types/bcryptjs": "2.4.2",
+    "@types/node": "^22.5.4",
+    "@types/supertest": "2.0.12",
+    "@typescript-eslint/eslint-plugin": "^6.5.0",
+    "@typescript-eslint/parser": "^6.5.0",
+    "eslint": "^8.48.0",
+    "prisma": "^5.0.0",
+    "supertest": "6.3.3",
+    "ts-node": "^10.9.1",
+    "tsup": "7.2.0",
+    "tsx": "4.19.0",
+    "typescript": "^5.2.2"
+  }
+}
