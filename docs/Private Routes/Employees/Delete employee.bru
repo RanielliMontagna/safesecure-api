@@ -1,11 +1,11 @@
 meta {
-  name: Delete category
+  name: Delete employee
   type: http
   seq: 5
 }
 
 delete {
-  url: {{apiUrl}}/category/
+  url: {{apiUrl}}/employeed/{id}
   body: none
   auth: bearer
 }

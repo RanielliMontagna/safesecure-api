@@ -1,0 +1,24 @@
+meta {
+  name: Create new employee
+  type: http
+  seq: 3
+}
+
+post {
+  url: {{apiUrl}}/employees
+  body: json
+  auth: bearer
+}
+
+auth:bearer {
+  token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZG9lLmNvbSIsIm5hbWUiOiJKb2huIiwic3ViIjoiNGQwZDc4ZDAtNDE1MC00YWM3LTk4ZGUtNWIxODBlMzI2MWYwIiwiaWF0IjoxNzI2MjQzMjc5LCJleHAiOjE3MjY4NDgwNzl9.JcNAFZLEX2hhAxdxZlDey5koW5IxoKXSmoFhMs73DNQ
+}
+
+body:json {
+  {
+    "name": "Cleiton da Silva",
+    "cpf": "123.456.789-09",
+    "registration": 123,
+    "sector": "Manutenção"
+  }
+}

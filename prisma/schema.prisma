@@ -15,6 +15,7 @@ model User {
 
   created_at DateTime   @default(now())
   Category   Category[]
+  Employee   Employee[]
 
   @@map("users")
 }
@@ -35,18 +36,22 @@ model Category {
   @@map("categories")
 }
 
-// model Employee {
-//   id           String @id @default(uuid())
-//   name         String
-//   cpf          String @unique
-//   registration Int    @unique
-//   setor        String
+model Employee {
+  id           String @id @default(uuid())
+  name         String
+  cpf          String @unique
+  registration Int    @unique
+  sector       String
 
-//   created_at DateTime @default(now())
-//   updated_at DateTime @updatedAt
+  user_id String
+  user    User   @relation(fields: [user_id], references: [id])
 
-//   @@map("employees")
-// }
+  created_at DateTime  @default(now())
+  updated_at DateTime  @updatedAt
+  deleted_at DateTime?
+
+  @@map("employees")
+}
 
 // model Equipment {
 //   id       String @id @default(uuid())
