@@ -11,8 +11,7 @@ import { categoryRoutes } from '@/http/controllers/categories/routes'
 export const app = fastify({})
 
 app.register(cors, {
-  origin: ['/localhost/', '/safesecure-front/', '/safesecure-api/'],
-  credentials: true,
+  origin: ['http://localhost:5173', 'https://safesecure-front.vercel.app/'],
 })
 
 app.register(fastifyJwt, {
