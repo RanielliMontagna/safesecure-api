@@ -13,6 +13,7 @@ export class PrismaEquipmentRepository implements EquipmentRepository {
         name: true,
         category: { select: { id: true, name: true } },
         quantity: true,
+        available_quantity: true,
       },
     })
 
@@ -30,6 +31,7 @@ export class PrismaEquipmentRepository implements EquipmentRepository {
         name: true,
         category: { select: { id: true, name: true } },
         quantity: true,
+        available_quantity: true,
       },
     })
 
@@ -47,6 +49,7 @@ export class PrismaEquipmentRepository implements EquipmentRepository {
         name: true,
         category: { select: { id: true, name: true } },
         quantity: true,
+        available_quantity: true,
       },
     })
 
@@ -75,5 +78,25 @@ export class PrismaEquipmentRepository implements EquipmentRepository {
       where: { id },
       data: { deleted_at: new Date() },
     })
+  }
+
+  async allocate(equipmentId: string, allocatedQuantity: number) {
+    const equipment = await prisma.equipment.update({
+      where: { id: equipmentId },
+      data: { available_quantity: { decrement: allocatedQuantity } },
+      select: { id: true, quantity: true, available_quantity: true },
+    })
+
+    return equipment
+  }
+
+  async returnAllocation(equipmentId: string, allocatedQuantity: number) {
+    const equipment = await prisma.equipment.update({
+      where: { id: equipmentId },
+      data: { available_quantity: { increment: allocatedQuantity } },
+      select: { id: true, quantity: true, available_quantity: true },
+    })
+
+    return equipment
   }
 }

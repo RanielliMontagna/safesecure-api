@@ -60,6 +60,7 @@ export class CreateEquipmentUseCase {
       code,
       category_id: categoryId,
       quantity,
+      available_quantity: quantity,
       user_id: userId,
     })
 

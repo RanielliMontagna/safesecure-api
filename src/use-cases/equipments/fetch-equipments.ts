@@ -16,6 +16,7 @@ interface FetchEquipmentsUseCaseResponse {
     name: Equipment['name']
     category: { name: Category['name'] }
     quantity: Equipment['quantity']
+    available_quantity: Equipment['available_quantity']
   }[]
 }
 
@@ -43,6 +44,7 @@ export class FetchEquipmentsUseCase {
         name: equipment.name,
         category: { id: equipment.category.id, name: equipment.category.name },
         quantity: equipment.quantity,
+        available_quantity: equipment.available_quantity,
       })),
     }
   }

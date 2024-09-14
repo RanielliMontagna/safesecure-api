@@ -6,6 +6,13 @@ interface EquipmentWithCategory {
   name: Equipment['name']
   category: { id: string; name: string }
   quantity: Equipment['quantity']
+  available_quantity: Equipment['available_quantity']
+}
+
+interface EquipmentNewQuantity {
+  id: Equipment['id']
+  quantity: Equipment['quantity']
+  available_quantity: Equipment['available_quantity']
 }
 
 export interface EquipmentRepository {
@@ -18,4 +25,12 @@ export interface EquipmentRepository {
   create(equipment: Prisma.EquipmentUncheckedCreateInput): Promise<Equipment>
   update(equipment: Prisma.EquipmentUncheckedUpdateInput): Promise<Equipment>
   delete(id: string): Promise<void>
+  allocate(
+    equipmentId: string,
+    allocatedQuantity: number,
+  ): Promise<EquipmentNewQuantity>
+  returnAllocation(
+    equipmentId: string,
+    allocatedQuantity: number,
+  ): Promise<EquipmentNewQuantity>
 }

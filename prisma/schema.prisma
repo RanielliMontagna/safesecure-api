@@ -15,9 +15,10 @@ model User {
 
   created_at DateTime @default(now())
 
-  Category  Category[]
-  Employee  Employee[]
-  Equipment Equipment[]
+  Category   Category[]
+  Employee   Employee[]
+  Equipment  Equipment[]
+  Allocation Allocation[]
 
   @@map("users")
 }
@@ -49,9 +50,10 @@ model Employee {
   user_id String
   user    User   @relation(fields: [user_id], references: [id])
 
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
+  created_at DateTime     @default(now())
+  updated_at DateTime     @updatedAt
   deleted_at DateTime?
+  Allocation Allocation[]
 
   @@map("employees")
 }
@@ -61,16 +63,41 @@ model Equipment {
   code        Int
   name        String
   category_id String
-  quantity    Int    @default(1)
+
+  quantity           Int @default(1)
+  available_quantity Int @default(1)
 
   category Category @relation(fields: [category_id], references: [id])
 
   user_id String
   user    User   @relation(fields: [user_id], references: [id])
 
-  created_at DateTime  @default(now())
-  updated_at DateTime  @updatedAt
+  created_at DateTime     @default(now())
+  updated_at DateTime     @updatedAt
   deleted_at DateTime?
+  Allocation Allocation[]
 
   @@map("equipments")
+}
+
+model Allocation {
+  id                 String    @id @default(uuid())
+  equipment_id       String
+  employee_id        String
+  start_date         DateTime
+  end_date           DateTime?
+  allocated_quantity Int
+  user_id            String
+
+  // status: 0 - allocated, 1 - returned
+  status Int @default(0)
+
+  equipment Equipment @relation(fields: [equipment_id], references: [id])
+  employee  Employee  @relation(fields: [employee_id], references: [id])
+  user      User      @relation(fields: [user_id], references: [id])
+
+  created_at DateTime @default(now())
+  updated_at DateTime @updatedAt
+
+  @@map("allocations")
 }

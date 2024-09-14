@@ -1,11 +1,11 @@
 meta {
-  name: Get Employees
+  name: Update allocation status to returned
   type: http
-  seq: 1
+  seq: 4
 }
 
-get {
-  url: {{apiUrl}}/employees
+patch {
+  url: {{apiUrl}}/allocations/614d5f13-a538-4ec8-b801-170d614f9ff1/return
   body: none
   auth: bearer
 }

@@ -18,6 +18,7 @@ interface GetEquipmentUseCaseResponse {
     name: Equipment['name']
     category: { id: Category['id']; name: Category['name'] }
     quantity: Equipment['quantity']
+    available_quantity: Equipment['available_quantity']
   }
 }
 
@@ -50,6 +51,7 @@ export class GetEquipmentUseCase {
         name: equipment.name,
         category: { id: equipment.category.id, name: equipment.category.name },
         quantity: equipment.quantity,
+        available_quantity: equipment.available_quantity,
       },
     }
   }

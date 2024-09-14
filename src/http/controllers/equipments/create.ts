@@ -6,6 +6,7 @@ import { EquipmentAlreadyExistsError } from '@/use-cases/errors/equipment-alread
 
 import { returnData } from '@/utils/returnData'
 import { CategoryNotFoundError } from '@/use-cases/errors/category-not-found-error'
+import { UserNotFoundError } from '@/use-cases/errors/user-not-found-error'
 
 export async function createEquipment(
   request: FastifyRequest,
@@ -35,12 +36,11 @@ export async function createEquipment(
 
     return reply.status(201).send(returnData({ id: equipment.id }))
   } catch (err) {
-    if (err instanceof CategoryNotFoundError) {
-      reply.status(400).send({ message: err.message })
-      return
-    }
-
-    if (err instanceof EquipmentAlreadyExistsError) {
+    if (
+      err instanceof CategoryNotFoundError ||
+      err instanceof EquipmentAlreadyExistsError ||
+      err instanceof UserNotFoundError
+    ) {
       reply.status(400).send({ message: err.message })
       return
     }
