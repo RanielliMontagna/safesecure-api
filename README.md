@@ -1,5 +1,5 @@
-<div>
-    <img src='public/safe-secure-logo.svg' alt='Safe Secure Logo' style={{width: 100, height: 100, display: 'block', margin: '0 auto'}} />
+<div align='center'>
+    <img src='public/safe-secure-logo.svg' alt='Safe Secure Logo' width='100' />
     <h1 align='center' style={{margin: 0}}>Safe Secure API</h1>
     <p align='center' style={{margin: 0}}>A api responsável por fazer o controle de equipamentos e alocação de equipamentos.</p>
 </div>
@@ -55,6 +55,3 @@ $ npm run dev
 ## 📝 Licença
 
 Este projeto está sob a licença MIT. Veja o arquivo [LICENSE](LICENSE) para mais detalhes.
-
-
-
