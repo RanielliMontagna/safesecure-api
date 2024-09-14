@@ -8,6 +8,7 @@ import { env } from '@/env'
 import { publicRoutes } from '@/http/controllers/public/routes'
 import { categoryRoutes } from '@/http/controllers/categories/routes'
 import { employeeRoutes } from '@/http/controllers/employees/routes'
+import { equipmentRoutes } from './http/controllers/equipments/routes'
 
 export const app = fastify({})
 
@@ -23,14 +24,13 @@ app.register(cors, {
 
 app.register(fastifyJwt, {
   secret: env.JWT_SECRET,
-  sign: {
-    expiresIn: '7d',
-  },
+  sign: { expiresIn: '7d' },
 })
 
 app.register(publicRoutes)
 app.register(categoryRoutes)
 app.register(employeeRoutes)
+app.register(equipmentRoutes)
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {

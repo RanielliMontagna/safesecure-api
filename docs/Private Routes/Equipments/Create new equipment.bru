@@ -1,11 +1,11 @@
 meta {
-  name: Create new category
+  name: Create new equipment
   type: http
   seq: 3
 }
 
 post {
-  url: {{apiUrl}}/categories
+  url: {{apiUrl}}/equipments
   body: json
   auth: bearer
 }
@@ -16,7 +16,8 @@ auth:bearer {
 
 body:json {
   {
-    "name": "Luvas",
-    "description": "Todos os tipos de luvas usadas para proteger as mãos contra riscos e lesões, cortes, abrasões, perfurações, queimaduras, produtos químicos, calor, frio e vibrações."
+    "code": 1,
+    "name": "Luvas Emborrachadas",
+    "categoryId": "932b8bec-69a2-40c5-ad98-1fa52bf90fe5"
   }
 }
