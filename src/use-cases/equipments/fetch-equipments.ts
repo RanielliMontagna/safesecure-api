@@ -41,7 +41,7 @@ export class FetchEquipmentsUseCase {
         id: equipment.id,
         code: equipment.code,
         name: equipment.name,
-        category: { name: equipment.category.name },
+        category: { id: equipment.category.id, name: equipment.category.name },
         quantity: equipment.quantity,
       })),
     }

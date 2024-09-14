@@ -4,7 +4,7 @@ interface EquipmentWithCategory {
   id: Equipment['id']
   code: Equipment['code']
   name: Equipment['name']
-  category: { name: string }
+  category: { id: string; name: string }
   quantity: Equipment['quantity']
 }
 

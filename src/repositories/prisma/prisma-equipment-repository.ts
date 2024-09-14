@@ -11,7 +11,7 @@ export class PrismaEquipmentRepository implements EquipmentRepository {
         id: true,
         code: true,
         name: true,
-        category: { select: { name: true } },
+        category: { select: { id: true, name: true } },
         quantity: true,
       },
     })
@@ -28,7 +28,7 @@ export class PrismaEquipmentRepository implements EquipmentRepository {
         id: true,
         code: true,
         name: true,
-        category: { select: { name: true } },
+        category: { select: { id: true, name: true } },
         quantity: true,
       },
     })
@@ -45,7 +45,7 @@ export class PrismaEquipmentRepository implements EquipmentRepository {
         id: true,
         code: true,
         name: true,
-        category: { select: { name: true } },
+        category: { select: { id: true, name: true } },
         quantity: true,
       },
     })
