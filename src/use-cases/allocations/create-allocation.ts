@@ -12,6 +12,7 @@ import {
   AllocationStatus,
 } from '@/repositories/allocation-repository'
 import { AllocatedQuantityExceedsAvailableError } from '../errors/allocated-quantity-exceeds-available'
+import { AllocatedQuantityBelowZeroError } from '../errors/allocated-quantity-below-zero'
 
 export interface CreateAllocationUseCaseRequest {
   equipmentId: string
@@ -61,6 +62,10 @@ export class CreateAllocationUseCase {
 
     if (allocatedQuantity > equipment.quantity) {
       throw new AllocatedQuantityExceedsAvailableError()
+    }
+
+    if (equipment.available_quantity - allocatedQuantity < 0) {
+      throw new AllocatedQuantityBelowZeroError()
     }
 
     await this.equipmentRepository.allocate(equipmentId, allocatedQuantity)

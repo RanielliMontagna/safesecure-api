@@ -1,9 +1,13 @@
 import { FastifyReply, FastifyRequest } from 'fastify'
 import { z } from 'zod'
 
-import { makeUpdateEquipmentUseCase } from '@/use-cases/factories/equipments/make-update-equipment-use-case'
-import { EquipmentNotFoundError } from '@/use-cases/errors/equipment-not-found-error'
 import { returnData } from '@/utils/returnData'
+
+import { CategoryNotFoundError } from '@/use-cases/errors/category-not-found-error'
+import { EquipmentNotFoundError } from '@/use-cases/errors/equipment-not-found-error'
+import { EquipmentInvalidQuantityError } from '@/use-cases/errors/equipment-invalid-quantity'
+
+import { makeUpdateEquipmentUseCase } from '@/use-cases/factories/equipments/make-update-equipment-use-case'
 
 export async function updateEquipment(
   request: FastifyRequest,
@@ -46,7 +50,11 @@ export async function updateEquipment(
       }),
     )
   } catch (err) {
-    if (err instanceof EquipmentNotFoundError) {
+    if (
+      err instanceof EquipmentNotFoundError ||
+      err instanceof CategoryNotFoundError ||
+      err instanceof EquipmentInvalidQuantityError
+    ) {
       reply.status(400).send({ message: err.message })
       return
     }

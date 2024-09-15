@@ -8,6 +8,7 @@ import type {
 import { EquipmentNotFoundError } from '@/use-cases/errors/equipment-not-found-error'
 import { CategoryRepository } from '@/repositories/category-repository'
 import { CategoryNotFoundError } from '../errors/category-not-found-error'
+import { EquipmentInvalidQuantityError } from '../errors/equipment-invalid-quantity'
 
 interface UpdateEquipmentCaseRequest {
   code?: CreateEquipmentUseCaseRequest['code']
@@ -46,12 +47,21 @@ export class UpdateEquipmentUseCase {
       throw new CategoryNotFoundError()
     }
 
+    const newQuantity = quantity || equipment.quantity
+    const diff = newQuantity - equipment.quantity
+    const newAvailableQuantity = equipment.available_quantity + diff
+
+    if (newAvailableQuantity < 0) {
+      throw new EquipmentInvalidQuantityError()
+    }
+
     const updatedEquipment = await this.equipmentRepository.update({
       id: equipmentId,
       code,
       name,
       category_id: categoryId,
-      quantity,
+      quantity: newQuantity,
+      available_quantity: newAvailableQuantity,
       user_id: userId,
     })
 

@@ -8,6 +8,7 @@ import { UserNotFoundError } from '@/use-cases/errors/user-not-found-error'
 import { EmployeeNotFoundError } from '@/use-cases/errors/employee-not-found-error'
 import { EquipmentNotFoundError } from '@/use-cases/errors/equipment-not-found-error'
 import { AllocatedQuantityExceedsAvailableError } from '@/use-cases/errors/allocated-quantity-exceeds-available'
+import { AllocatedQuantityBelowZeroError } from '@/use-cases/errors/allocated-quantity-below-zero'
 
 export async function createAllocation(
   request: FastifyRequest,
@@ -36,13 +37,14 @@ export async function createAllocation(
       userId: request.user.sub,
     })
 
-    return reply.status(201).send(returnData({ id: allocation.id }))
+    return reply.status(201).send(returnData(allocation))
   } catch (err) {
     if (
       err instanceof UserNotFoundError ||
       err instanceof EmployeeNotFoundError ||
       err instanceof EquipmentNotFoundError ||
-      err instanceof AllocatedQuantityExceedsAvailableError
+      err instanceof AllocatedQuantityExceedsAvailableError ||
+      err instanceof AllocatedQuantityBelowZeroError
     ) {
       reply.status(400).send({ message: err.message })
       return

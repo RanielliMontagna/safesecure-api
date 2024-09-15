@@ -20,9 +20,7 @@ export async function returnAllocation(
       userId: request.user.sub,
     })
 
-    return reply
-      .status(200)
-      .send(returnData({ id: allocation.id, status: allocation.status }))
+    return reply.status(200).send(returnData(allocation))
   } catch (err) {
     if (err instanceof AllocationNotFoundError) {
       reply.status(400).send({ message: err.message })

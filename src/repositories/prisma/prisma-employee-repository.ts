@@ -52,7 +52,7 @@ export class PrismaEmployeeRepository implements EmployeeRepository {
   }
 
   async delete(id: string) {
-    await prisma.category.update({
+    await prisma.employee.update({
       where: { id },
       data: { deleted_at: new Date() },
     })
