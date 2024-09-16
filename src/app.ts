@@ -10,6 +10,7 @@ import { categoryRoutes } from '@/http/controllers/categories/routes'
 import { employeeRoutes } from '@/http/controllers/employees/routes'
 import { equipmentRoutes } from './http/controllers/equipments/routes'
 import { allocationRoutes } from './http/controllers/allocations/routes'
+import { logsRoutes } from './http/controllers/logs/routes'
 
 export const app = fastify({})
 
@@ -33,6 +34,7 @@ app.register(categoryRoutes)
 app.register(employeeRoutes)
 app.register(equipmentRoutes)
 app.register(allocationRoutes)
+app.register(logsRoutes)
 
 app.setErrorHandler((error, _, reply) => {
   if (error instanceof ZodError) {

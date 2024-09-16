@@ -1,24 +1,15 @@
 meta {
-  name: Create new equipment
+  name: Get logs
   type: http
-  seq: 3
+  seq: 1
 }
 
-post {
-  url: {{apiUrl}}/equipments
-  body: json
+get {
+  url: {{apiUrl}}/logs
+  body: none
   auth: bearer
 }
 
 auth:bearer {
   token: eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJlbWFpbCI6ImpvaG5AZG9lLmNvbSIsIm5hbWUiOiJKb2huIiwic3ViIjoiZDRmN2I4YWItYTQ3Yy00Mzc3LWJiMzUtYWRhM2ZlODA5MTY5IiwiaWF0IjoxNzI2NTAwOTA1LCJleHAiOjE3MjcxMDU3MDV9.qFb9JFG6hhBxD2402x4drxmO7fS0viDRvbr84plGmxk
-}
-
-body:json {
-  {
-    "code": 1,
-    "name": "Luvas Emborrachadas",
-    "categoryId": "83415dde-2c7a-404c-9602-1acd7fb7f0b3",
-    "quantity": 10
-  }
 }
