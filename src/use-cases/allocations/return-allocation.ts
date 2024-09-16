@@ -67,7 +67,7 @@ export class ReturnAllocationUseCase {
       entity: LogEntities.ALLOCATIONS,
       user_id: userId,
       entity_id: allocation.id,
-      details: `A alocação de ${allocation.allocatedQuantity} ${equipment.name} para o funcionário ${allocation.employee.name} foi devolvida pelo usuário ${user.name}`,
+      details: `A alocação de ${allocation.allocatedQuantity} unidade(s) do equipamento ${equipment.name} para o funcionário ${allocation.employee.name} foi devolvida pelo usuário ${user.name}`,
     })
 
     return {

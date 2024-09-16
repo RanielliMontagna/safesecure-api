@@ -88,11 +88,7 @@ export class CreateAllocationUseCase {
 
     await this.logRepository.create({
       action: LogAction.CREATE,
-      details: `Alocação de ${allocatedQuantity} ${
-        allocatedQuantity > 1 ? 'unidades' : 'unidade'
-      } de ${equipment.name} para o funcionário ${
-        employee.name
-      } foi criada pelo usuário ${user.name}`,
+      details: `Alocação de ${allocatedQuantity} unidade(s) de ${equipment.name} para o funcionário ${employee.name} foi criada pelo usuário ${user.name}`,
       entity: LogEntities.ALLOCATIONS,
       user_id: userId,
       entity_id: allocation.id,

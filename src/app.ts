@@ -2,6 +2,9 @@ import fastify from 'fastify'
 import cors from '@fastify/cors'
 import fastifyJwt from '@fastify/jwt'
 
+import { setupFastifyErrorHandler } from '@sentry/node'
+import '@/lib/sentry'
+
 import { ZodError } from 'zod'
 
 import { env } from '@/env'
@@ -13,6 +16,8 @@ import { allocationRoutes } from './http/controllers/allocations/routes'
 import { logsRoutes } from './http/controllers/logs/routes'
 
 export const app = fastify({})
+
+setupFastifyErrorHandler(app)
 
 app.register(cors, {
   origin: [
@@ -45,8 +50,6 @@ app.setErrorHandler((error, _, reply) => {
 
   if (env.NODE_ENV !== 'production') {
     console.error(error)
-  } else {
-    // Implement a logger here (e.g. Sentry, Bugsnag, etc.)
   }
 
   return reply.status(500).send({
