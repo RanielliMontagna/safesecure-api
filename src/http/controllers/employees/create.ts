@@ -5,6 +5,7 @@ import { makeCreateEmployeeUseCase } from '@/use-cases/factories/employees/make-
 import { EmployeeAlreadyExistsError } from '@/use-cases/errors/employee-already-exists'
 
 import { returnData } from '@/utils/returnData'
+import { UserNotFoundError } from '@/use-cases/errors/user-not-found-error'
 
 export async function createEmployee(
   request: FastifyRequest,
@@ -12,12 +13,9 @@ export async function createEmployee(
 ) {
   const createEmployeeBodySchema = z.object({
     name: z.string(),
-    // remove the mask from the CPF and validate it having 11 digits
-    cpf: z
-      .string()
-      .refine((cpf) => cpf.replace(/\D/g, '').length === 11, {
-        message: 'CPF informado é inválido',
-      }),
+    cpf: z.string().refine((cpf) => cpf.replace(/\D/g, '').length === 11, {
+      message: 'CPF informado é inválido',
+    }),
     registration: z.number(),
     sector: z.string(),
   })
@@ -39,7 +37,10 @@ export async function createEmployee(
 
     return reply.status(201).send(returnData({ id: employee.id }))
   } catch (err) {
-    if (err instanceof EmployeeAlreadyExistsError) {
+    if (
+      err instanceof EmployeeAlreadyExistsError ||
+      err instanceof UserNotFoundError
+    ) {
       reply.status(400).send({ message: err.message })
       return
     }

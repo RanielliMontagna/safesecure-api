@@ -5,6 +5,7 @@ import { makeCreateCategoryUseCase } from '@/use-cases/factories/categories/make
 import { CategoryAlreadyExistsError } from '@/use-cases/errors/category-already-exists'
 
 import { returnData } from '@/utils/returnData'
+import { UserNotFoundError } from '@/use-cases/errors/user-not-found-error'
 
 export async function createCategory(
   request: FastifyRequest,
@@ -28,7 +29,10 @@ export async function createCategory(
 
     return reply.status(201).send(returnData({ id: category.id }))
   } catch (err) {
-    if (err instanceof CategoryAlreadyExistsError) {
+    if (
+      err instanceof CategoryAlreadyExistsError ||
+      err instanceof UserNotFoundError
+    ) {
       reply.status(400).send({ message: err.message })
       return
     }

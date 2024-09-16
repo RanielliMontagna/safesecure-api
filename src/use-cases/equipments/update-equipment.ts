@@ -6,9 +6,17 @@ import type {
 } from './create-equipment'
 
 import { EquipmentNotFoundError } from '@/use-cases/errors/equipment-not-found-error'
+import { CategoryNotFoundError } from '@/use-cases/errors/category-not-found-error'
+import { EquipmentInvalidQuantityError } from '@/use-cases/errors/equipment-invalid-quantity'
+import { UserNotFoundError } from '@/use-cases/errors/user-not-found-error'
+
 import { CategoryRepository } from '@/repositories/category-repository'
-import { CategoryNotFoundError } from '../errors/category-not-found-error'
-import { EquipmentInvalidQuantityError } from '../errors/equipment-invalid-quantity'
+import { UserRepository } from '@/repositories/user-repository'
+import {
+  LogAction,
+  LogEntities,
+  LogRepository,
+} from '@/repositories/log-repository'
 
 interface UpdateEquipmentCaseRequest {
   code?: CreateEquipmentUseCaseRequest['code']
@@ -25,6 +33,8 @@ export class UpdateEquipmentUseCase {
   constructor(
     private equipmentRepository: EquipmentRepository,
     private categoryRepository: CategoryRepository,
+    private userRepository: UserRepository,
+    private logRepository: LogRepository,
   ) {}
 
   async execute({
@@ -35,17 +45,14 @@ export class UpdateEquipmentUseCase {
     userId,
     equipmentId,
   }: UpdateEquipmentCaseRequest): Promise<UpdateEquipmentCaseResponse> {
-    const equipment = await this.equipmentRepository.findById(equipmentId)
+    const user = await this.userRepository.findById(userId)
+    if (!user) throw new UserNotFoundError()
 
-    if (!equipment) {
-      throw new EquipmentNotFoundError()
-    }
+    const equipment = await this.equipmentRepository.findById(equipmentId)
+    if (!equipment) throw new EquipmentNotFoundError()
 
     const category = await this.categoryRepository.findById(categoryId)
-
-    if (!category) {
-      throw new CategoryNotFoundError()
-    }
+    if (!category) throw new CategoryNotFoundError()
 
     const newQuantity = quantity || equipment.quantity
     const diff = newQuantity - equipment.quantity
@@ -62,6 +69,14 @@ export class UpdateEquipmentUseCase {
       category_id: categoryId,
       quantity: newQuantity,
       available_quantity: newAvailableQuantity,
+      user_id: userId,
+    })
+
+    await this.logRepository.create({
+      action: LogAction.UPDATE,
+      details: `Equipamento ${equipment.name} atualizado por ${user.name}`,
+      entity: LogEntities.EQUIPMENTS,
+      entity_id: equipmentId,
       user_id: userId,
     })
 

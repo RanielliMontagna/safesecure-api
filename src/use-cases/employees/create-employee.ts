@@ -1,10 +1,15 @@
 import { Employee } from '@prisma/client'
 
-import { EmployeeRepository } from '@/repositories/employee-repository'
-import { UserRepository } from '@/repositories/user-repository'
-
 import { EmployeeAlreadyExistsError } from '@/use-cases/errors/employee-already-exists'
 import { UserNotFoundError } from '@/use-cases/errors/user-not-found-error'
+
+import { EmployeeRepository } from '@/repositories/employee-repository'
+import { UserRepository } from '@/repositories/user-repository'
+import {
+  LogAction,
+  LogEntities,
+  LogRepository,
+} from '@/repositories/log-repository'
 
 export interface CreateEmployeeUseCaseRequest {
   name: string
@@ -22,6 +27,7 @@ export class CreateEmployeeUseCase {
   constructor(
     private employeeRepository: EmployeeRepository,
     private userRepository: UserRepository,
+    private logRepository: LogRepository,
   ) {}
 
   async execute({
@@ -49,6 +55,14 @@ export class CreateEmployeeUseCase {
       cpf,
       registration,
       sector,
+      user_id: userId,
+    })
+
+    await this.logRepository.create({
+      action: LogAction.CREATE,
+      details: `Funcionário ${employee.name} criado por ${user.name}`,
+      entity: LogEntities.EMPLOYEES,
+      entity_id: employee.id,
       user_id: userId,
     })
 

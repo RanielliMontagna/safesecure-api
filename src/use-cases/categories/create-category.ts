@@ -2,6 +2,11 @@ import { Category } from '@prisma/client'
 
 import { CategoryRepository } from '@/repositories/category-repository'
 import { UserRepository } from '@/repositories/user-repository'
+import {
+  LogAction,
+  LogEntities,
+  LogRepository,
+} from '@/repositories/log-repository'
 
 import { CategoryAlreadyExistsError } from '@/use-cases/errors/category-already-exists'
 import { UserNotFoundError } from '@/use-cases/errors/user-not-found-error'
@@ -20,6 +25,7 @@ export class CreateCategoryUseCase {
   constructor(
     private categoryRepository: CategoryRepository,
     private userRepository: UserRepository,
+    private logRepository: LogRepository,
   ) {}
 
   async execute({
@@ -46,6 +52,14 @@ export class CreateCategoryUseCase {
       name,
       description,
       user_id: userId,
+    })
+
+    await this.logRepository.create({
+      action: LogAction.CREATE,
+      entity: LogEntities.CATEGORIES,
+      entity_id: category.id,
+      user_id: userId,
+      details: `Categoria ${category.name} criada por ${user.name}`,
     })
 
     return { category }

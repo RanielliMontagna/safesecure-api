@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { makeUpdateCategoryUseCase } from '@/use-cases/factories/categories/make-update-category-use-case'
 import { CategoryNotFoundError } from '@/use-cases/errors/category-not-found-error'
 import { returnData } from '@/utils/returnData'
+import { UserNotFoundError } from '@/use-cases/errors/user-not-found-error'
 
 export async function updateCategory(
   request: FastifyRequest,
@@ -38,7 +39,10 @@ export async function updateCategory(
       }),
     )
   } catch (err) {
-    if (err instanceof CategoryNotFoundError) {
+    if (
+      err instanceof CategoryNotFoundError ||
+      err instanceof UserNotFoundError
+    ) {
       reply.status(400).send({ message: err.message })
       return
     }

@@ -3,6 +3,7 @@ import { z } from 'zod'
 
 import { makeDeleteEmployeeUseCase } from '@/use-cases/factories/employees/make-delete-employee-use-case'
 import { EmployeeNotFoundError } from '@/use-cases/errors/employee-not-found-error'
+import { UserNotFoundError } from '@/use-cases/errors/user-not-found-error'
 
 export async function deleteEmployee(
   request: FastifyRequest,
@@ -15,9 +16,15 @@ export async function deleteEmployee(
   try {
     const deleteEmployeeUseCase = makeDeleteEmployeeUseCase()
 
-    await deleteEmployeeUseCase.execute({ employeeId: id })
+    await deleteEmployeeUseCase.execute({
+      employeeId: id,
+      userId: request.user.sub,
+    })
   } catch (err) {
-    if (err instanceof EmployeeNotFoundError) {
+    if (
+      err instanceof EmployeeNotFoundError ||
+      err instanceof UserNotFoundError
+    ) {
       reply.status(400).send({ message: err.message })
       return
     }

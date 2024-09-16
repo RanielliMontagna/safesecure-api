@@ -19,6 +19,7 @@ model User {
   Employee   Employee[]
   Equipment  Equipment[]
   Allocation Allocation[]
+  Log        Log[]
 
   @@map("users")
 }
@@ -100,4 +101,24 @@ model Allocation {
   updated_at DateTime @updatedAt
 
   @@map("allocations")
+}
+
+enum ActionType {
+  CREATE
+  UPDATE
+  DELETE
+}
+
+model Log {
+  id         String     @id @default(uuid())
+  user_id    String
+  action     ActionType
+  entity     String
+  entity_id  String
+  details    String?
+  created_at DateTime   @default(now())
+
+  user User @relation(fields: [user_id], references: [id])
+
+  @@map("logs")
 }

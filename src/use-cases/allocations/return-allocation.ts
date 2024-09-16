@@ -7,6 +7,11 @@ import { AllocationNotFoundError } from '@/use-cases/errors/allocation-not-found
 import { UserRepository } from '@/repositories/user-repository'
 import type { AllocationRepository } from '@/repositories/allocation-repository'
 import { EquipmentRepository } from '@/repositories/equipment-repository'
+import {
+  LogAction,
+  LogEntities,
+  LogRepository,
+} from '@/repositories/log-repository'
 
 interface ReturnAllocationCaseRequest {
   allocationId: string
@@ -30,6 +35,7 @@ export class ReturnAllocationUseCase {
     private allocationRepository: AllocationRepository,
     private equipmentRepository: EquipmentRepository,
     private userRepository: UserRepository,
+    private logRepository: LogRepository,
   ) {}
 
   async execute({
@@ -55,6 +61,14 @@ export class ReturnAllocationUseCase {
     const updatedAllocation = await this.allocationRepository.returnAllocation(
       allocationId,
     )
+
+    await this.logRepository.create({
+      action: LogAction.UPDATE,
+      entity: LogEntities.ALLOCATIONS,
+      user_id: userId,
+      entity_id: allocation.id,
+      details: `A alocação de ${allocation.allocatedQuantity} ${equipment.name} para o funcionário ${allocation.employee.name} foi devolvida pelo usuário ${user.name}`,
+    })
 
     return {
       allocation: {

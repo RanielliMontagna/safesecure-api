@@ -8,6 +8,7 @@ import { EquipmentNotFoundError } from '@/use-cases/errors/equipment-not-found-e
 import { EquipmentInvalidQuantityError } from '@/use-cases/errors/equipment-invalid-quantity'
 
 import { makeUpdateEquipmentUseCase } from '@/use-cases/factories/equipments/make-update-equipment-use-case'
+import { UserNotFoundError } from '@/use-cases/errors/user-not-found-error'
 
 export async function updateEquipment(
   request: FastifyRequest,
@@ -53,7 +54,8 @@ export async function updateEquipment(
     if (
       err instanceof EquipmentNotFoundError ||
       err instanceof CategoryNotFoundError ||
-      err instanceof EquipmentInvalidQuantityError
+      err instanceof EquipmentInvalidQuantityError ||
+      err instanceof UserNotFoundError
     ) {
       reply.status(400).send({ message: err.message })
       return

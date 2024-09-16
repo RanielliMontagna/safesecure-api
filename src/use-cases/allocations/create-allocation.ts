@@ -13,6 +13,11 @@ import {
 } from '@/repositories/allocation-repository'
 import { AllocatedQuantityExceedsAvailableError } from '../errors/allocated-quantity-exceeds-available'
 import { AllocatedQuantityBelowZeroError } from '../errors/allocated-quantity-below-zero'
+import {
+  LogAction,
+  LogEntities,
+  LogRepository,
+} from '@/repositories/log-repository'
 
 export interface CreateAllocationUseCaseRequest {
   equipmentId: string
@@ -41,6 +46,7 @@ export class CreateAllocationUseCase {
     private employeeRepository: EmployeeRepository,
     private equipmentRepository: EquipmentRepository,
     private userRepository: UserRepository,
+    private logRepository: LogRepository,
   ) {}
 
   async execute({
@@ -78,6 +84,18 @@ export class CreateAllocationUseCase {
       allocated_quantity: allocatedQuantity,
       user_id: userId,
       status: AllocationStatus.ALLOCATED,
+    })
+
+    await this.logRepository.create({
+      action: LogAction.CREATE,
+      details: `Alocação de ${allocatedQuantity} ${
+        allocatedQuantity > 1 ? 'unidades' : 'unidade'
+      } de ${equipment.name} para o funcionário ${
+        employee.name
+      } foi criada pelo usuário ${user.name}`,
+      entity: LogEntities.ALLOCATIONS,
+      user_id: userId,
+      entity_id: allocation.id,
     })
 
     return {

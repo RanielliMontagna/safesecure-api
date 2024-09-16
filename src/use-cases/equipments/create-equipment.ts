@@ -5,8 +5,14 @@ import { UserRepository } from '@/repositories/user-repository'
 
 import { EquipmentAlreadyExistsError } from '@/use-cases/errors/equipment-already-exists'
 import { UserNotFoundError } from '@/use-cases/errors/user-not-found-error'
+import { CategoryNotFoundError } from '@/use-cases/errors/category-not-found-error'
+
 import { CategoryRepository } from '@/repositories/category-repository'
-import { CategoryNotFoundError } from '../errors/category-not-found-error'
+import {
+  LogAction,
+  LogEntities,
+  LogRepository,
+} from '@/repositories/log-repository'
 
 export interface CreateEquipmentUseCaseRequest {
   code: number
@@ -25,6 +31,7 @@ export class CreateEquipmentUseCase {
     private equipmentRepository: EquipmentRepository,
     private categoryRepository: CategoryRepository,
     private userRepository: UserRepository,
+    private logRepository: LogRepository,
   ) {}
 
   async execute({
@@ -61,6 +68,14 @@ export class CreateEquipmentUseCase {
       category_id: categoryId,
       quantity,
       available_quantity: quantity,
+      user_id: userId,
+    })
+
+    await this.logRepository.create({
+      action: LogAction.CREATE,
+      details: `Equipamento ${equipment.name} criado por ${user.name}`,
+      entity: LogEntities.EQUIPMENTS,
+      entity_id: equipment.id,
       user_id: userId,
     })
 

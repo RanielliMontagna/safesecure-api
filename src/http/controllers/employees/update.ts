@@ -4,6 +4,7 @@ import { z } from 'zod'
 import { makeUpdateEmployeeUseCase } from '@/use-cases/factories/employees/make-update-employee-use-case'
 import { EmployeeNotFoundError } from '@/use-cases/errors/employee-not-found-error'
 import { returnData } from '@/utils/returnData'
+import { UserNotFoundError } from '@/use-cases/errors/user-not-found-error'
 
 export async function updateEmployee(
   request: FastifyRequest,
@@ -48,7 +49,10 @@ export async function updateEmployee(
       }),
     )
   } catch (err) {
-    if (err instanceof EmployeeNotFoundError) {
+    if (
+      err instanceof EmployeeNotFoundError ||
+      err instanceof UserNotFoundError
+    ) {
       reply.status(400).send({ message: err.message })
       return
     }
