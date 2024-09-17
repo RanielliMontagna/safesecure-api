@@ -14,11 +14,13 @@ interface FetchCategoriesUseCaseRequest {
 }
 
 interface FetchCategoriesUseCaseResponse {
-  categories: {
-    id: Category['id']
-    name: Category['name']
-    description: Category['description']
-  }[]
+  categories:
+    | {
+        id: Category['id']
+        name: Category['name']
+        description: Category['description']
+      }[]
+    | null
 }
 
 export class FetchCategoriesUseCase {
@@ -38,6 +40,10 @@ export class FetchCategoriesUseCase {
       userId,
       options,
     )
+
+    if (categories.length === 0 && !options?.search) {
+      return { categories: null }
+    }
 
     return {
       categories: categories.map((category) => ({

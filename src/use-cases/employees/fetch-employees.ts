@@ -14,13 +14,15 @@ interface FetchEmployeesUseCaseRequest {
 }
 
 interface FetchEmployeesUseCaseResponse {
-  employees: {
-    id: Employee['id']
-    name: Employee['name']
-    cpf: Employee['cpf']
-    registration: Employee['registration']
-    sector: Employee['sector']
-  }[]
+  employees:
+    | {
+        id: Employee['id']
+        name: Employee['name']
+        cpf: Employee['cpf']
+        registration: Employee['registration']
+        sector: Employee['sector']
+      }[]
+    | null
 }
 
 export class FetchEmployeesUseCase {
@@ -40,6 +42,10 @@ export class FetchEmployeesUseCase {
       userId,
       options,
     )
+
+    if (employees.length === 0 && !options?.search) {
+      return { employees: null }
+    }
 
     return {
       employees: employees.map((employee) => ({

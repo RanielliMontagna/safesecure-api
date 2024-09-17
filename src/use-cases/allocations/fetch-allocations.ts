@@ -14,15 +14,17 @@ interface FetchAllocationsUseCaseRequest {
 }
 
 interface FetchAllocationsUseCaseResponse {
-  allocations: {
-    id: Allocation['id']
-    equipment: { id: string; name: string }
-    employee: { id: string; name: string }
-    startDate: Allocation['start_date']
-    endDate: Allocation['end_date']
-    allocatedQuantity: Allocation['allocated_quantity']
-    status: Allocation['status']
-  }[]
+  allocations:
+    | {
+        id: Allocation['id']
+        equipment: { id: string; name: string }
+        employee: { id: string; name: string }
+        startDate: Allocation['start_date']
+        endDate: Allocation['end_date']
+        allocatedQuantity: Allocation['allocated_quantity']
+        status: Allocation['status']
+      }[]
+    | null
 }
 
 export class FetchAllocationsUseCase {
@@ -42,6 +44,10 @@ export class FetchAllocationsUseCase {
       userId,
       options,
     )
+
+    if (allocations.length === 0 && !options?.search) {
+      return { allocations: null }
+    }
 
     return {
       allocations: allocations.map((allocation) => ({

@@ -14,14 +14,16 @@ interface FetchEquipmentsUseCaseRequest {
 }
 
 interface FetchEquipmentsUseCaseResponse {
-  equipments: {
-    id: Equipment['id']
-    code: Equipment['code']
-    name: Equipment['name']
-    category: { name: Category['name'] }
-    quantity: Equipment['quantity']
-    available_quantity: Equipment['available_quantity']
-  }[]
+  equipments:
+    | {
+        id: Equipment['id']
+        code: Equipment['code']
+        name: Equipment['name']
+        category: { name: Category['name'] }
+        quantity: Equipment['quantity']
+        available_quantity: Equipment['available_quantity']
+      }[]
+    | null
 }
 
 export class FetchEquipmentsUseCase {
@@ -41,6 +43,10 @@ export class FetchEquipmentsUseCase {
       userId,
       options,
     )
+
+    if (equipments.length === 0 && !options?.search) {
+      return { equipments: null }
+    }
 
     return {
       equipments: equipments.map((equipment) => ({
