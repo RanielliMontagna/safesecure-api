@@ -1,4 +1,5 @@
 import { Allocation, Prisma } from '@prisma/client'
+import { Options } from '@/use-cases/options/options'
 
 export enum AllocationStatus {
   ALLOCATED = 0,
@@ -15,9 +16,14 @@ export interface AllocationResponse {
   status: AllocationStatus
 }
 
+export interface FindManyByUserIdOptions extends Pick<Options, 'search'> {}
+
 export interface AllocationRepository {
   findById(userId: string): Promise<AllocationResponse | null>
-  findManyByUserId(userId: string): Promise<AllocationResponse[]>
+  findManyByUserId(
+    userId: string,
+    options?: FindManyByUserIdOptions,
+  ): Promise<AllocationResponse[]>
   create(
     allocation: Prisma.AllocationUncheckedCreateInput,
   ): Promise<AllocationResponse>

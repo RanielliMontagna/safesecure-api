@@ -1,7 +1,11 @@
-import { AllocationStatus } from './../allocation-repository'
 import { Prisma } from '@prisma/client'
+
+import {
+  AllocationRepository,
+  AllocationStatus,
+  FindManyByUserIdOptions,
+} from '@/repositories/allocation-repository'
 import { prisma } from '@/lib/prisma'
-import { AllocationRepository } from '@/repositories/allocation-repository'
 
 const selectObject = {
   id: true,
@@ -33,9 +37,18 @@ export class PrismaAllocationRepository implements AllocationRepository {
     }
   }
 
-  async findManyByUserId(userId: string) {
+  async findManyByUserId(userId: string, options?: FindManyByUserIdOptions) {
+    const orArray: Prisma.AllocationWhereInput[] = [
+      {
+        equipment: { name: { contains: options?.search, mode: 'insensitive' } },
+      },
+      {
+        employee: { name: { contains: options?.search, mode: 'insensitive' } },
+      },
+    ]
+
     const allocations = await prisma.allocation.findMany({
-      where: { user_id: userId },
+      where: { user_id: userId, OR: options?.search ? orArray : undefined },
       select: selectObject,
     })
 

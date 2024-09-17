@@ -46,7 +46,7 @@ export class UpdateEmployeeUseCase {
     const updatedEmployee = await this.employeeRepository.update({
       id: employeeId,
       name: name,
-      cpf: cpf,
+      cpf: cpf ? cpf.replace(/\D/g, '') : undefined,
       registration: registration,
       sector: sector,
       user_id: userId,

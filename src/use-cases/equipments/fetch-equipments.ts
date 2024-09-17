@@ -1,12 +1,16 @@
 import { Category, Equipment } from '@prisma/client'
 
-import { EquipmentRepository } from '@/repositories/equipment-repository'
+import {
+  EquipmentRepository,
+  FindManyByUserIdOptions,
+} from '@/repositories/equipment-repository'
 import { UserRepository } from '@/repositories/user-repository'
 
 import { UserNotFoundError } from '@/use-cases/errors/user-not-found-error'
 
 interface FetchEquipmentsUseCaseRequest {
   userId: string
+  options?: Pick<FindManyByUserIdOptions, 'search'>
 }
 
 interface FetchEquipmentsUseCaseResponse {
@@ -28,14 +32,15 @@ export class FetchEquipmentsUseCase {
 
   async execute({
     userId,
+    options,
   }: FetchEquipmentsUseCaseRequest): Promise<FetchEquipmentsUseCaseResponse> {
     const user = await this.userRepository.findById(userId)
+    if (!user) throw new UserNotFoundError()
 
-    if (!user) {
-      throw new UserNotFoundError()
-    }
-
-    const equipments = await this.equipmentRepository.findManyByUserId(userId)
+    const equipments = await this.equipmentRepository.findManyByUserId(
+      userId,
+      options,
+    )
 
     return {
       equipments: equipments.map((equipment) => ({

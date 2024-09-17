@@ -3,10 +3,14 @@ import { Allocation } from '@prisma/client'
 import { UserNotFoundError } from '@/use-cases/errors/user-not-found-error'
 
 import { UserRepository } from '@/repositories/user-repository'
-import { AllocationRepository } from '@/repositories/allocation-repository'
+import {
+  AllocationRepository,
+  FindManyByUserIdOptions,
+} from '@/repositories/allocation-repository'
 
 interface FetchAllocationsUseCaseRequest {
   userId: string
+  options?: Pick<FindManyByUserIdOptions, 'search'>
 }
 
 interface FetchAllocationsUseCaseResponse {
@@ -29,11 +33,15 @@ export class FetchAllocationsUseCase {
 
   async execute({
     userId,
+    options,
   }: FetchAllocationsUseCaseRequest): Promise<FetchAllocationsUseCaseResponse> {
     const user = await this.userRepository.findById(userId)
     if (!user) throw new UserNotFoundError()
 
-    const allocations = await this.allocationRepository.findManyByUserId(userId)
+    const allocations = await this.allocationRepository.findManyByUserId(
+      userId,
+      options,
+    )
 
     return {
       allocations: allocations.map((allocation) => ({

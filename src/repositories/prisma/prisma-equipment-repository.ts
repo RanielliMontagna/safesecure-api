@@ -1,7 +1,10 @@
 import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 
-import { EquipmentRepository } from '../equipment-repository'
+import {
+  EquipmentRepository,
+  FindManyByUserIdOptions,
+} from '../equipment-repository'
 
 export class PrismaEquipmentRepository implements EquipmentRepository {
   async findById(id: string) {
@@ -40,9 +43,17 @@ export class PrismaEquipmentRepository implements EquipmentRepository {
     return equipment
   }
 
-  async findManyByUserId(userId: string) {
+  async findManyByUserId(userId: string, options?: FindManyByUserIdOptions) {
+    const orArray: Prisma.EquipmentWhereInput[] = [
+      { name: { contains: options?.search, mode: 'insensitive' } },
+    ]
+
     const equipments = await prisma.equipment.findMany({
-      where: { user_id: userId, deleted_at: null },
+      where: {
+        user_id: userId,
+        deleted_at: null,
+        OR: options?.search ? orArray : undefined,
+      },
       select: {
         id: true,
         code: true,

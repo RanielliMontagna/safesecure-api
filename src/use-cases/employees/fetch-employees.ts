@@ -1,12 +1,16 @@
 import { Employee } from '@prisma/client'
 
-import { EmployeeRepository } from '@/repositories/employee-repository'
+import {
+  EmployeeRepository,
+  FindManyByUserIdOptions,
+} from '@/repositories/employee-repository'
 import { UserRepository } from '@/repositories/user-repository'
 
 import { UserNotFoundError } from '@/use-cases/errors/user-not-found-error'
 
 interface FetchEmployeesUseCaseRequest {
   userId: string
+  options?: Pick<FindManyByUserIdOptions, 'search'>
 }
 
 interface FetchEmployeesUseCaseResponse {
@@ -27,14 +31,15 @@ export class FetchEmployeesUseCase {
 
   async execute({
     userId,
+    options,
   }: FetchEmployeesUseCaseRequest): Promise<FetchEmployeesUseCaseResponse> {
     const user = await this.userRepository.findById(userId)
+    if (!user) throw new UserNotFoundError()
 
-    if (!user) {
-      throw new UserNotFoundError()
-    }
-
-    const employees = await this.employeeRepository.findManyByUserId(userId)
+    const employees = await this.employeeRepository.findManyByUserId(
+      userId,
+      options,
+    )
 
     return {
       employees: employees.map((employee) => ({

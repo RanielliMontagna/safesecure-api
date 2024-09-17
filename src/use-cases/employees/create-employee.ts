@@ -52,7 +52,7 @@ export class CreateEmployeeUseCase {
 
     const employee = await this.employeeRepository.create({
       name,
-      cpf,
+      cpf: cpf.replace(/\D/g, ''),
       registration,
       sector,
       user_id: userId,

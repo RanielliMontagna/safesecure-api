@@ -1,12 +1,16 @@
 import { Category } from '@prisma/client'
 
-import { CategoryRepository } from '@/repositories/category-repository'
+import {
+  CategoryRepository,
+  FindManyByUserIdOptions,
+} from '@/repositories/category-repository'
 import { UserRepository } from '@/repositories/user-repository'
 
 import { UserNotFoundError } from '@/use-cases/errors/user-not-found-error'
 
 interface FetchCategoriesUseCaseRequest {
   userId: string
+  options?: Pick<FindManyByUserIdOptions, 'search'>
 }
 
 interface FetchCategoriesUseCaseResponse {
@@ -25,14 +29,15 @@ export class FetchCategoriesUseCase {
 
   async execute({
     userId,
+    options,
   }: FetchCategoriesUseCaseRequest): Promise<FetchCategoriesUseCaseResponse> {
     const user = await this.userRepository.findById(userId)
+    if (!user) throw new UserNotFoundError()
 
-    if (!user) {
-      throw new UserNotFoundError()
-    }
-
-    const categories = await this.categoryRepository.findManyByUserId(userId)
+    const categories = await this.categoryRepository.findManyByUserId(
+      userId,
+      options,
+    )
 
     return {
       categories: categories.map((category) => ({

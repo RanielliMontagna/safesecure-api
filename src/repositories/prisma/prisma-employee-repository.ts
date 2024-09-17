@@ -1,7 +1,10 @@
 import { Prisma } from '@prisma/client'
 
 import { prisma } from '@/lib/prisma'
-import { EmployeeRepository } from '../employee-repository'
+import {
+  EmployeeRepository,
+  FindManyByUserIdOptions,
+} from '../employee-repository'
 
 export class PrismaEmployeeRepository implements EmployeeRepository {
   async findById(id: string) {
@@ -26,9 +29,19 @@ export class PrismaEmployeeRepository implements EmployeeRepository {
     return employee
   }
 
-  async findManyByUserId(userId: string) {
+  async findManyByUserId(userId: string, options: FindManyByUserIdOptions) {
+    const orArray: Prisma.EmployeeWhereInput[] = [
+      { name: { contains: options?.search, mode: 'insensitive' } },
+      { cpf: { contains: options?.search, mode: 'insensitive' } },
+      { registration: { equals: Number(options?.search?.replace(/\D/g, '')) } },
+    ]
+
     const employees = await prisma.employee.findMany({
-      where: { user_id: userId, deleted_at: null },
+      where: {
+        user_id: userId,
+        deleted_at: null,
+        OR: options?.search ? orArray : undefined,
+      },
     })
 
     return employees
