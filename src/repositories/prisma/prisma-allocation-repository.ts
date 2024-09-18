@@ -151,4 +151,33 @@ export class PrismaAllocationRepository implements AllocationRepository {
 
     return allocationsByDay
   }
+
+  async getDashboardInfo(userId: string) {
+    const activeAllocations = await prisma.allocation.count({
+      where: { user_id: userId, status: AllocationStatus.ALLOCATED },
+    })
+
+    const lateAllocations = await prisma.allocation.count({
+      where: {
+        user_id: userId,
+        status: AllocationStatus.ALLOCATED,
+        end_date: { lt: new Date() },
+      },
+    })
+
+    const equipments = await prisma.equipment.count({
+      where: { user_id: userId },
+    })
+
+    const employees = await prisma.employee.count({
+      where: { user_id: userId },
+    })
+
+    return {
+      activeAllocations,
+      lateAllocations,
+      equipments,
+      employees,
+    }
+  }
 }

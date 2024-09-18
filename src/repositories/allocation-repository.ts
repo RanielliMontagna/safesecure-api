@@ -23,6 +23,13 @@ export interface AllocationWeek {
 
 export interface FindManyByUserIdOptions extends Pick<Options, 'search'> {}
 
+export interface DashboardInfo {
+  activeAllocations: number
+  lateAllocations: number
+  equipments: number
+  employees: number
+}
+
 export interface AllocationRepository {
   findById(userId: string): Promise<AllocationResponse | null>
   findManyByUserId(
@@ -37,4 +44,5 @@ export interface AllocationRepository {
     userId: string,
   ): Promise<AllocationResponse[] | null>
   getAllocationByWeek(userId: string): Promise<AllocationWeek[]>
+  getDashboardInfo(userId: string): Promise<DashboardInfo>
 }

@@ -8,11 +8,13 @@ import { createAllocation } from './create'
 import { returnAllocation } from './update'
 import { getLatestAllocations } from './get-latest-allocations'
 import { getAllocationsGraphicsWeek } from './get-allocations-by-week'
+import { getDashboardInfo } from './get-dashboard-info'
 
 export async function allocationRoutes(app: FastifyInstance) {
   app.addHook('onRequest', verifyJWT)
 
   app.get('/allocations', fetchAllocations)
+  app.get('/allocations/dashboard', getDashboardInfo)
   app.get('/allocations/latest', getLatestAllocations)
   app.get('/allocations/week', getAllocationsGraphicsWeek)
   app.get('/allocations/:id', getAllocation)
