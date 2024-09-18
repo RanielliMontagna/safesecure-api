@@ -1,3 +1,12 @@
+import dayjs from 'dayjs'
+import utc from 'dayjs/plugin/utc'
+import localeData from 'dayjs/plugin/localeData'
+import ptBR from 'dayjs/locale/pt-br'
+
+dayjs.extend(utc)
+dayjs.extend(localeData)
+dayjs.locale(ptBR)
+
 import { Prisma } from '@prisma/client'
 
 import {
@@ -6,6 +15,7 @@ import {
   FindManyByUserIdOptions,
 } from '@/repositories/allocation-repository'
 import { prisma } from '@/lib/prisma'
+import { capitalize } from '@/utils/capitalize'
 
 const selectObject = {
   id: true,
@@ -117,5 +127,28 @@ export class PrismaAllocationRepository implements AllocationRepository {
       allocatedQuantity: allocation.allocated_quantity,
       status: allocation.status,
     }))
+  }
+
+  async getAllocationByWeek(userId: string) {
+    const allocations = await prisma.allocation.groupBy({
+      by: ['start_date'],
+      _sum: { allocated_quantity: true },
+      where: { user_id: userId },
+    })
+
+    const allDaysOfWeek = dayjs.weekdays().map(capitalize)
+
+    const allocationsByDay = allDaysOfWeek.map((day, index) => {
+      const allocation = allocations.find(
+        (allocation) => dayjs(allocation.start_date).utc().day() === index,
+      )
+
+      return {
+        day,
+        allocatedQuantity: allocation?._sum.allocated_quantity || 0,
+      }
+    })
+
+    return allocationsByDay
   }
 }

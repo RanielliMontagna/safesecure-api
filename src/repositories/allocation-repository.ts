@@ -16,6 +16,11 @@ export interface AllocationResponse {
   status: AllocationStatus
 }
 
+export interface AllocationWeek {
+  day: string
+  allocatedQuantity: number
+}
+
 export interface FindManyByUserIdOptions extends Pick<Options, 'search'> {}
 
 export interface AllocationRepository {
@@ -31,4 +36,5 @@ export interface AllocationRepository {
   getLatestAllocationByUserId(
     userId: string,
   ): Promise<AllocationResponse[] | null>
+  getAllocationByWeek(userId: string): Promise<AllocationWeek[]>
 }
