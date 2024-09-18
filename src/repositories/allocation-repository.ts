@@ -28,4 +28,7 @@ export interface AllocationRepository {
     allocation: Prisma.AllocationUncheckedCreateInput,
   ): Promise<AllocationResponse>
   returnAllocation(id: string): Promise<AllocationResponse>
+  getLatestAllocationByUserId(
+    userId: string,
+  ): Promise<AllocationResponse[] | null>
 }

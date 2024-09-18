@@ -97,4 +97,25 @@ export class PrismaAllocationRepository implements AllocationRepository {
       status: returnedAllocation.status,
     }
   }
+
+  async getLatestAllocationByUserId(userId: string) {
+    const allocation = await prisma.allocation.findMany({
+      where: { user_id: userId },
+      orderBy: { created_at: 'desc' },
+      take: 5,
+      select: selectObject,
+    })
+
+    if (!allocation.length) return null
+
+    return allocation.map((allocation) => ({
+      id: allocation.id,
+      equipment: allocation.equipment,
+      employee: allocation.employee,
+      startDate: allocation.start_date,
+      endDate: allocation.end_date,
+      allocatedQuantity: allocation.allocated_quantity,
+      status: allocation.status,
+    }))
+  }
 }

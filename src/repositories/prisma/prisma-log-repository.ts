@@ -7,6 +7,7 @@ export class PrismaLogRepository implements LogRepository {
   async findManyByUserId(userId: string) {
     const logs = await prisma.log.findMany({
       where: { user_id: userId },
+      orderBy: { created_at: 'desc' },
     })
 
     return logs
