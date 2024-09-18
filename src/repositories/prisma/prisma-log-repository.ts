@@ -1,12 +1,17 @@
 import { Prisma } from '@prisma/client'
 import { prisma } from '@/lib/prisma'
 
-import { LogRepository } from '../log-repository'
+import { FindManyByUserIdOptions, LogRepository } from '../log-repository'
 
 export class PrismaLogRepository implements LogRepository {
-  async findManyByUserId(userId: string) {
+  async findManyByUserId(userId: string, options?: FindManyByUserIdOptions) {
+    const orArray: Prisma.LogWhereInput[] = [
+      { details: { contains: options?.search, mode: 'insensitive' } },
+      { entity: { contains: options?.search, mode: 'insensitive' } },
+    ]
+
     const logs = await prisma.log.findMany({
-      where: { user_id: userId },
+      where: { user_id: userId, OR: options?.search ? orArray : undefined },
       orderBy: { created_at: 'desc' },
     })
 

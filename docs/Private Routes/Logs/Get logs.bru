@@ -5,9 +5,13 @@ meta {
 }
 
 get {
-  url: {{apiUrl}}/logs
+  url: {{apiUrl}}/logs?search=
   body: none
   auth: bearer
+}
+
+params:query {
+  search: 
 }
 
 auth:bearer {
